@@ -226,16 +226,16 @@ class FunctionalConfigurationTests extends FunSuite with BeforeAndAfterEach {
 
 	test("init and destroy") {
 		val applicationContext = new GenericApplicationContext()
+    applicationContext.refresh()
 
 		val config = new FunctionalConfiguration {
-
-			val foo = bean("foo") {
-				new InitializablePerson("John", "Doe")
-			} init {
-				_.initialize()
-			} destroy {
-				_.destroy()
-			}
+      val foo = bean("foo") {
+        new InitializablePerson("John", "Doe")
+      } init {
+        _.initialize()
+      } destroy {
+        _.destroy()
+      }
 		}
 		config.register(applicationContext, beanNameGenerator)
 		applicationContext.refresh()

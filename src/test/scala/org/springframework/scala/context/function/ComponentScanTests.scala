@@ -19,7 +19,6 @@ package org.springframework.scala.context.function
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{Matchers, GivenWhenThen, FunSuite}
-import org.scalatest.matchers.ShouldMatchers
 import org.springframework.stereotype.Component
 import org.springframework.context.annotation.{AnnotationScopeMetadataResolver, ScopedProxyMode}
 import org.springframework.core.`type`.filter.RegexPatternTypeFilter

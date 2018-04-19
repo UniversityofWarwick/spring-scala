@@ -311,6 +311,7 @@ trait FunctionalConfiguration extends DelayedInit {
 		initCode.foreach(_())
 
 		registrationCode.foreach(_(applicationContext, beanNameGenerator))
+    applicationContext.refresh()
 	}
 
 	/**

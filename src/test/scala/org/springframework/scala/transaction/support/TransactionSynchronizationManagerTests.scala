@@ -22,7 +22,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import collection.mutable.ListBuffer
-import org.scalatest.matchers.ShouldMatchers
 import org.springframework.transaction.support.TransactionSynchronization
 
 @RunWith(classOf[JUnitRunner])
