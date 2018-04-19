@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'scala'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
+apply plugin: 'maven'
 
 apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
@@ -9,12 +10,12 @@ apply plugin: 'propdeps-idea'
 apply plugin: 'propdeps-eclipse'
 
 group 'org.springframework.scala'
-archivesBaseName = "spring-scala_2.11"
+archivesBaseName = "spring-scala_2.12"
 
 ext {
-  springVersion = '3.2.4.RELEASE'
-  scalaVersion = '2.11.2'
-  scalaLibVersion = '2.11'
+  springVersion = '3.2.18.RELEASE'
+  scalaVersion = '2.12.5'
+  scalaLibVersion = '2.12'
 }
 
 repositories {
@@ -36,31 +37,34 @@ dependencies {
   compile("org.scala-lang:scala-library:$scalaVersion")
   compile("org.scala-lang:scala-reflect:$scalaVersion")
   //needs to be as separate jar file for scala 2.11
-  compile("org.scala-lang.modules:scala-xml_$scalaLibVersion:1.0.2")
+  compile("org.scala-lang.modules:scala-xml_$scalaLibVersion:1.0.6")
 
   // Jackson
-  optional("com.fasterxml.jackson.module:jackson-module-scala_$scalaLibVersion:2.4.2")
+  optional("com.fasterxml.jackson.module:jackson-module-scala_$scalaLibVersion:2.6.7.1")
 
   // Java EE
   provided("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1")
-  provided("javax.servlet:servlet-api:2.5")
+  provided("javax.servlet:javax.servlet-api:3.0.1")
+  provided("javax.inject:javax.inject:1")
 
   // Test
-  testCompile("org.scalatest:scalatest_$scalaLibVersion:2.2.2")
-  testCompile("junit:junit:4.10")
+  testCompile("org.scalatest:scalatest_$scalaLibVersion:3.0.5")
+  testCompile("junit:junit:4.12")
   testRuntime("org.hsqldb:hsqldb-j5:2.2.4")
-  testRuntime("log4j:log4j:1.2.16")
+  testRuntime("log4j:log4j:1.2.17")
   testCompile("org.springframework:spring-aspects:$springVersion")
 }
 
 tasks.withType(ScalaCompile) {
   scalaCompileOptions.additionalParameters = ["-feature", "-language:implicitConversions", "-language:reflectiveCalls"]
-  scalaCompileOptions.useAnt = false
 }
 
+// upgrade to a different version of Gradle by changing this
+// value then running `./gradlew wrapper`. Next time gradlew
+// is run it will fetch and use that version.
 task wrapper(type: Wrapper) {
-  description = 'Generates gradlew[.bat] scripts'
-  gradleVersion = '2.1'
+    gradleVersion = '4.7'
+    distributionType = 'ALL'
 }
 
 buildscript {
@@ -70,4 +74,26 @@ buildscript {
     dependencies {
         classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
     }
+}
+
+artifacts {
+	archives jar
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: mavenRepositoryUrl) {
+				authentication(userName: mavenRepositoryUsername, password: mavenRepositoryPassword)
+			}
+
+			pom.project {
+				description "${project.description}"
+				groupId "${project.group}"
+				name "${project.name}"
+				packaging 'jar'
+				version "${project.version}"
+			}
+		}
+	}
 }
