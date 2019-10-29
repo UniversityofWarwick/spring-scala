@@ -10,12 +10,12 @@ apply plugin: 'propdeps-idea'
 apply plugin: 'propdeps-eclipse'
 
 group 'org.springframework.scala'
-archivesBaseName = "spring-scala_2.12"
+archivesBaseName = "spring-scala_2.13"
 
 ext {
   springVersion = '3.2.18.RELEASE'
-  scalaVersion = '2.12.5'
-  scalaLibVersion = '2.12'
+  scalaVersion = '2.13.1'
+  scalaLibVersion = '2.13'
 }
 
 repositories {
@@ -37,10 +37,10 @@ dependencies {
   compile("org.scala-lang:scala-library:$scalaVersion")
   compile("org.scala-lang:scala-reflect:$scalaVersion")
   //needs to be as separate jar file for scala 2.11
-  compile("org.scala-lang.modules:scala-xml_$scalaLibVersion:1.0.6")
+  compile("org.scala-lang.modules:scala-xml_$scalaLibVersion:1.2.0")
 
   // Jackson
-  optional("com.fasterxml.jackson.module:jackson-module-scala_$scalaLibVersion:2.6.7.1")
+  optional("com.fasterxml.jackson.module:jackson-module-scala_$scalaLibVersion:2.9.10")
 
   // Java EE
   provided("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1")
@@ -48,7 +48,7 @@ dependencies {
   provided("javax.inject:javax.inject:1")
 
   // Test
-  testCompile("org.scalatest:scalatest_$scalaLibVersion:3.0.5")
+  testCompile("org.scalatest:scalatest_$scalaLibVersion:3.0.8")
   testCompile("junit:junit:4.12")
   testRuntime("org.hsqldb:hsqldb-j5:2.2.4")
   testRuntime("log4j:log4j:1.2.17")

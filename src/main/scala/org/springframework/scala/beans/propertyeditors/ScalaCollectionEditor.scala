@@ -17,8 +17,9 @@
 package org.springframework.scala.beans.propertyeditors
 
 import java.beans.PropertyEditorSupport
-import scala.collection.JavaConversions._
+
 import scala.collection.mutable
+import scala.jdk.CollectionConverters._
 
 /**
  * Property editor for Scala collections, converting any source collection to a given
@@ -52,11 +53,11 @@ class ScalaCollectionEditor[T, U](val builderFunction: () => mutable.Builder[T, 
 				builder ++= source
 			}
 			case javaCollection: java.util.Collection[T] => {
-				builder ++= collectionAsScalaIterable(javaCollection)
+				builder ++= javaCollection.asScala
 			}
 			case javaMap: java.util.Map[T, U] => {
 				val mapBuilder = builder.asInstanceOf[mutable.Builder[(T, U), _]]
-				mapBuilder ++= mapAsScalaMap(javaMap)
+				mapBuilder ++= javaMap.asScala
 			}
 			case el=> {
 				builder += el.asInstanceOf[T]

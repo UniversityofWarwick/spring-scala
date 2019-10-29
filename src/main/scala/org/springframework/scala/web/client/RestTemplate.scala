@@ -17,12 +17,14 @@
 package org.springframework.scala.web.client
 
 import java.net.URI
-import scala.collection.{Map, Set}
-import scala.collection.JavaConverters._
-import org.springframework.web.client.{RequestCallback, ResponseExtractor}
+
 import org.springframework.http.client.{ClientHttpRequest, ClientHttpRequestFactory, ClientHttpResponse}
-import org.springframework.http.{HttpHeaders, HttpEntity, ResponseEntity, HttpMethod}
+import org.springframework.http.{HttpEntity, HttpHeaders, HttpMethod, ResponseEntity}
 import org.springframework.scala.util.TypeTagUtils.typeToClass
+import org.springframework.web.client.{RequestCallback, ResponseExtractor}
+
+import scala.collection.{Map, Set}
+import scala.jdk.CollectionConverters._
 import scala.reflect.ClassTag
 
 /**

@@ -16,13 +16,14 @@
 
 package org.springframework.scala.context.function
 
-import org.springframework.context.support.GenericApplicationContext
-import org.springframework.util.CollectionUtils
-import scala.collection.JavaConversions._
 import org.springframework.beans.BeanUtils
-import org.springframework.beans.factory.support.{DefaultBeanNameGenerator, BeanNameGenerator}
+import org.springframework.beans.factory.support.{BeanNameGenerator, DefaultBeanNameGenerator}
+import org.springframework.context.support.GenericApplicationContext
 import org.springframework.scala.context.RichApplicationContext
 import org.springframework.scala.util.TypeTagUtils.typeToClass
+import org.springframework.util.CollectionUtils
+
+import scala.jdk.CollectionConverters._
 import scala.reflect.ClassTag
 
 /**
@@ -64,7 +65,7 @@ class FunctionalConfigApplicationContext
 	 * @param configurationClasses one or more functional configuration classes
 	 */
 	def registerClasses(configurationClasses: Class[_ <: FunctionalConfiguration]*) {
-		require(!CollectionUtils.isEmpty(configurationClasses),
+		require(!CollectionUtils.isEmpty(configurationClasses.asJava),
 		        "At least one functional configuration class must be specified")
 		val configurations = configurationClasses.map(BeanUtils.instantiate(_))
 		registerConfigurations(configurations: _*)
@@ -77,7 +78,7 @@ class FunctionalConfigApplicationContext
 	 * @param configurations one or more functional configurations
 	 */
 	def registerConfigurations(configurations: FunctionalConfiguration*) {
-		require(!CollectionUtils.isEmpty(configurations),
+		require(!CollectionUtils.isEmpty(configurations.asJava),
 		        "At least one configuration must be specified")
 		configurations.foreach(_.register(this, beanNameGenerator))
 	}
@@ -93,7 +94,7 @@ class FunctionalConfigApplicationContext
 		getBeanNamesForType(typeToClass[T], includeNonSingletons, allowEagerInit)
 
 	def beansOfType[T: ClassTag](includeNonSingletons: Boolean, allowEagerInit: Boolean) =
-		getBeansOfType(typeToClass[T], includeNonSingletons, allowEagerInit).toMap
+		getBeansOfType(typeToClass[T], includeNonSingletons, allowEagerInit).asScala.toMap
 }
 
 /**

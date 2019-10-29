@@ -39,9 +39,6 @@ class CollectionsBean {
 	var mutableIndexedSeq: scala.collection.mutable.IndexedSeq[String] = null
 
 	@BeanProperty
-	var resizableArray: scala.collection.mutable.ResizableArray[String] = null
-
-	@BeanProperty
 	var linearSeq: scala.collection.LinearSeq[String] = null
 
 	@BeanProperty

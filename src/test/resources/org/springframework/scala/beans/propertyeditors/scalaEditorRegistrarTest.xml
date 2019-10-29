@@ -36,8 +36,6 @@
         <property name="immutableIndexedSeq" ref="javaList"/>
         <property name="mutableIndexedSeq" ref="javaList"/>
 
-        <property name="resizableArray" ref="javaList"/>
-
         <property name="linearSeq" ref="javaList"/>
         <property name="immutableLinearSeq" ref="javaList"/>
         <property name="mutableLinearSeq" ref="javaList"/>

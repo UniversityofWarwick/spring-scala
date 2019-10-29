@@ -32,8 +32,8 @@ class SetFactoryBean[T](val sourceSet: scala.collection.Set[T],
                         val builderFunction: () => mutable.Builder[T, Set[T]])
 		extends AbstractFactoryBean[scala.collection.Set[T]] {
 
-	def this(sourceSet: scala.collection.Set[T]) {
-		this(sourceSet, scala.collection.Set.newBuilder[T] _)
+	def this(sourceSet: scala.collection.immutable.Set[T]) {
+		this(sourceSet, scala.collection.immutable.Set.newBuilder[T] _)
 	}
 
 	override def getObjectType = classOf[scala.collection.Set[T]]

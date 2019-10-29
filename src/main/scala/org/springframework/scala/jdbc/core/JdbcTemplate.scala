@@ -16,17 +16,17 @@
 
 package org.springframework.scala.jdbc.core
 
-import scala.collection.JavaConverters._
-import javax.sql.DataSource
 import java.sql._
+
+import javax.sql.DataSource
+import org.springframework.dao.{DataAccessException, IncorrectResultSizeDataAccessException}
 import org.springframework.jdbc.core._
-import java.lang.String
-import org.springframework.jdbc.support.rowset.SqlRowSet
-import JdbcCallbackConversions._
 import org.springframework.jdbc.support.KeyHolder
-import org.springframework.dao.DataAccessException
+import org.springframework.jdbc.support.rowset.SqlRowSet
+import org.springframework.scala.jdbc.core.JdbcCallbackConversions._
 import org.springframework.scala.util.TypeTagUtils.typeToClass
-import scala.throws
+
+import scala.jdk.CollectionConverters._
 import scala.reflect.ClassTag
 
 /**
@@ -136,7 +136,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	 */
 	@throws(classOf[DataAccessException])
 	def queryAndMap[T](sql: String)(rowMapper: (ResultSet, Int) => T): Seq[T] = {
-		javaTemplate.query(sql, rowMapper).asScala
+		javaTemplate.query(sql, rowMapper).asScala.toSeq
 	}
 
 	/**
@@ -206,7 +206,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	 */
 	@throws(classOf[DataAccessException])
 	def queryForSeq[T: ClassTag](sql: String): Seq[T] = {
-		javaTemplate.queryForList(sql, typeToClass[T]).asScala
+		javaTemplate.queryForList(sql, typeToClass[T]).asScala.toSeq
 	}
 
 	/**
@@ -222,7 +222,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	 */
 	@throws(classOf[DataAccessException])
 	def queryForMappedColumns(sql: String): Seq[Map[String, Any]] = {
-		javaTemplate.queryForList(sql).asScala.map(mappedRow => asInstanceOfAny(mappedRow))
+		javaTemplate.queryForList(sql).asScala.map(mappedRow => asInstanceOfAny(mappedRow)).toSeq
 	}
 
 	/**
@@ -467,7 +467,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	@throws(classOf[DataAccessException])
 	def queryAndMap[T](statementCreator: Connection => PreparedStatement)
 	                  (rowMapper: (ResultSet, Int) => T): Seq[T] = {
-		javaTemplate.query(statementCreator, rowMapper).asScala
+		javaTemplate.query(statementCreator, rowMapper).asScala.toSeq
 	}
 
 	/**
@@ -485,7 +485,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	def queryWithSetterAndMap[T](sql: String)
 	                            (setterCallback: PreparedStatement => Unit)
 	                            (rowMapper: (ResultSet, Int) => T): Seq[T] = {
-		javaTemplate.query(sql, setterCallback, rowMapper).asScala
+		javaTemplate.query(sql, setterCallback, rowMapper).asScala.toSeq
 	}
 
 	/**
@@ -504,7 +504,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	def queryAndMap[T](sql: String, args: Seq[Any], argTypes: Seq[Int])
 	                  (rowMapper: (ResultSet, Int) => T): Seq[T] = {
 		javaTemplate.query(sql, asInstanceOfAnyRef(args).toArray, argTypes.toArray, rowMapper)
-				.asScala
+				.asScala.toSeq
 	}
 
 	/**
@@ -521,7 +521,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	@throws(classOf[DataAccessException])
 	def queryAndMap[T](sql: String, args: Any*)
 	                  (rowMapper: (ResultSet, Int) => T): Seq[T] = {
-		javaTemplate.query(sql, asInstanceOfAnyRef(args).toArray, rowMapper).asScala
+		javaTemplate.query(sql, asInstanceOfAnyRef(args).toArray, rowMapper).asScala.toSeq
 	}
 
 	/**
@@ -679,7 +679,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 		javaTemplate.queryForList(sql,
 		                          asInstanceOfAnyRef(args).toArray,
 		                          argTypes.toArray,
-															typeToClass[T]).asScala
+															typeToClass[T]).asScala.toSeq
 	}
 
 	/**
@@ -699,7 +699,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	def queryForSeq[T: ClassTag](sql: String, args: Any*): Seq[T] = {
 		javaTemplate
 				.queryForList(sql, typeToClass[T], asInstanceOfAnyRef(args): _*)
-				.asScala
+				.asScala.toSeq
 	}
 
 	/**
@@ -722,7 +722,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	                             args: Seq[Any],
 	                             argTypes: Seq[Int]): Seq[Map[String, Any]] = {
 		javaTemplate.queryForList(sql, asInstanceOfAnyRef(args).toArray, argTypes.toArray)
-				.asScala.map(mappedRow => asInstanceOfAny(mappedRow))
+				.asScala.map(mappedRow => asInstanceOfAny(mappedRow)).toSeq
 	}
 
 	/**
@@ -742,7 +742,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	@throws(classOf[DataAccessException])
 	def queryForMappedColumns(sql: String, args: Any*): Seq[Map[String, Any]] = {
 		javaTemplate.queryForList(sql, asInstanceOfAnyRef(args): _*).asScala
-				.map(mappedRow => asInstanceOfAny(mappedRow))
+				.map(mappedRow => asInstanceOfAny(mappedRow)).toSeq
 	}
 
 	/**
@@ -1011,7 +1011,7 @@ class JdbcTemplate(val javaTemplate: org.springframework.jdbc.core.JdbcTemplate)
 	// Private helpers
 	//-------------------------------------------------------------------------
 	private def asInstanceOfAny(map: java.util.Map[String, AnyRef]): Map[String, Any] = {
-		map.asScala.toMap.mapValues(_.asInstanceOf[Any])
+		map.asScala.toMap.view.mapValues(_.asInstanceOf[Any]).toMap
 	}
 
 	private def asInstanceOfAnyRef(seq: Seq[Any]): Seq[AnyRef] = {

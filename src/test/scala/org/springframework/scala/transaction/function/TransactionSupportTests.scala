@@ -147,7 +147,7 @@ class TransactionSupportTests extends FunSuite with BeforeAndAfterEach {
 
 class DummyTransactionManager extends AbstractPlatformTransactionManager {
   def doGetTransaction(): AnyRef = {
-    Unit
+    java.lang.Boolean.TRUE
   }
 
   def doBegin(transaction: Any, definition: TransactionDefinition) {}

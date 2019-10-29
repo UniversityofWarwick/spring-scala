@@ -16,9 +16,10 @@
 
 package org.springframework.scala.beans.factory
 
-import org.springframework.beans.factory.{ListableBeanFactory, BeanFactory}
-import scala.collection.JavaConversions._
+import org.springframework.beans.factory.{BeanFactory, ListableBeanFactory}
 import org.springframework.scala.util.TypeTagUtils.typeToClass
+
+import scala.jdk.CollectionConverters._
 import scala.reflect.ClassTag
 
 /**
@@ -77,6 +78,7 @@ private[springframework] class DefaultRichListableBeanFactory(beanFactory: Lista
                                 allowEagerInit: Boolean = true): Map[String, T] = {
 		beanFactory
 				.getBeansOfType(typeToClass[T], includeNonSingletons, allowEagerInit)
+  			.asScala
 				.toMap
 	}
 

@@ -16,10 +16,10 @@
 
 package org.springframework.scala.beans.propertyeditors
 
-import org.scalatest.FunSuite
-import org.springframework.context.support.ClassPathXmlApplicationContext
 import org.junit.runner.RunWith
+import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
+import org.springframework.context.support.ClassPathXmlApplicationContext
 
 /**
  * @author Arjen Poutsma
@@ -57,8 +57,6 @@ class ScalaEditorRegistrarTests extends FunSuite {
 		testSeq(bean.immutableIndexedSeq)
 		testSeq(bean.mutableIndexedSeq)
 
-		testSeq(bean.resizableArray)
-
 		testSeq(bean.linearSeq)
 		testSeq(bean.immutableLinearSeq)
 		testSeq(bean.mutableLinearSeq)
@@ -74,7 +72,7 @@ class ScalaEditorRegistrarTests extends FunSuite {
 		testMap(bean.mutableMap)
 	}
 	
-	private def testSeq(seq: Seq[String]) {
+	private def testSeq(seq: scala.collection.Seq[String]) {
 		assert(seq != null)
 		assert(seq.size == 3)
 		assert(seq.contains("one"))
